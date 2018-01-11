@@ -21,11 +21,19 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+m = size(X, 1);
+X2 = sum( X.^2, 2);
+centroids2 = sum(centroids.^2,2);
+I_m = ones(m,1);
+I_k = ones(K, 1);
 
+sim = bsxfun(@plus, X2 * I_k', bsxfun(@plus, I_m * centroids2', - 2 * (X * centroids')));
+min_set = min(sim, [], 2);
+sim_I = sim == min_set;
 
-
-
-
+for i = 1:m
+  idx(i) = find(sim_I(i,:) == 1,1);
+end
 
 % =============================================================
 

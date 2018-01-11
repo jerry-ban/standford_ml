@@ -27,7 +27,10 @@ centroids = zeros(K, n);
 %
 
 
-
+for ki = 1:K
+  kset = find(idx== ki);
+  centroids(ki,:) = mean(X(kset, :),1) ;
+end
 
 
 
