@@ -42,14 +42,36 @@ Theta_grad = zeros(size(Theta));
 
 
 
+H_theta = X * Theta';
+cost1=  (H_theta - Y) .^2;
+cost2 = 0.5 * sum((cost1.*R)(:));
+J = cost2 + 0.5* lambda * sum((X.^2)(:)) + 0.5* lambda * sum((Theta.^2)(:));
 
+for k = 1: num_features
+  for j = 1: num_users
+    for i = 1: num_movies
+      if R(i,j) ==1 
+        Theta_grad(j, k) = Theta_grad(j, k) + ( Theta(j,:) * X(i,:)' - Y(i,j) ) * X(i,k);
+       end
+  
+    end
+    Theta_grad(j, k) = Theta_grad(j, k) + lambda * Theta(j,k);
+  end
+  
+end
 
-
-
-
-
-
-
+for k = 1: num_features
+  for i = 1: num_movies
+    for j = 1: num_users    
+      if R(i,j) ==1 
+        X_grad(i, k) = X_grad(i, k) + ( Theta(j,:) * X(i,:)' - Y(i,j) ) * Theta(j,k);
+       end
+  
+    end
+    X_grad(i, k) = X_grad(i, k) + lambda * X(i,k);
+  end
+  
+end
 
 
 
